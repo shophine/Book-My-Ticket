@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+    <title>Analytics</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+
+        .button1:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "/showAnalytics",
+                data: "data",
+                type: "GET",
+                success: function (response) {
+                    // var response = JSON.parse(x);
+                    // console.log(typeof response);
+                    //console.log(response);
+                    var array = [];
+                    array.push(['Age', 'Occurence']);
+                    console.log(response.length);
+                    var tempocc=0;
+                    for(var i=0;i<response.length;i++){
+                        tempocc += response[i].occurence;
+                        if(i%10==0 && i!=0){
+                            var record = [response[i].age+"",tempocc];
+                            array.push(record);
+                            tempocc=0;
+                        }
+
+                    }
+                    //console.log(array);
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        console.log(array);
+
+                        var data = google.visualization.arrayToDataTable(array);
+
+                        var options = {
+                            title: 'Bookings based on age'
+                        };
+
+                        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                        chart.draw(data, options);
+                    }
+                    //$("#countryList").append(text);
+
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+                },
+                dataType: "json",
+                contentType: "application/json"
+            });
+        });
+
+
+
+    </script>
+</head>
+<body>
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+<button class="button button1" onclick="window.location.href='index.html'">Go to Home</button>
+</body>
+</html>

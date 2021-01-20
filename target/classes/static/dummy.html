@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+
+    <title>Book Movie</title>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        body {
+            background:url('https://i.imgur.com/gaqdL8o.jpg') repeat #ccc;
+            font-family: 'Open Sans', sans-serif;
+            font-weight:400;
+        }
+        a {
+            text-decoration:none;
+            color:white;
+            outline:none; /* IE fix */
+        }
+        .container, nav#mainNav {
+            width:768px;
+            margin:0 auto;
+        }
+        .header {
+            background:#e1fbfc;
+            background:linear-gradient(#e2fbfd, #e1fbfc);
+            background:-webkit-linear-gradient(#e2fbfd, #e1fbfc);
+            background:-moz-linear-gradient(#e2fbfd, #e1fbfc);
+            background:-o-linear-gradient(#e2fbfd, #e1fbfc);
+            background:-ms-linear-gradient(#e2fbfd, #e1fbfc);
+
+            padding:10px 0 0 10px;
+        }
+        div.logo {
+            width: 768px;
+            margin:0 auto;
+        }
+        div.navBar, input[type="submit"] {
+            background::#50a5ed;
+            background:linear-gradient(#50a5ed, #3280c2);
+            background:-webkit-linear-gradient(#50a5ed, #3280c2);
+            background:-moz-linear-gradient(#50a5ed, #3280c2);
+            background:-o-linear-gradient(#50a5ed, #3280c2);
+            background:-ms-linear-gradient(#50a5ed, #3280c2);
+            box-shadow:inset 0 1px #6ce4f6, 0 1px #787778;
+            color:white;
+        }
+        nav#mainNav {
+            overflow:hidden;
+        }
+        #mainNav ul {
+            list-style:none;
+            float:left;
+        }
+        #mainNav ul li {
+            display:inline;
+        }
+        #mainNav ul li a {
+            padding:15px 0;
+            margin-right:30px;
+            display:inline-block;
+            position:relative;
+            text-align:center;
+        }
+        #mainNav ul li a:after {
+            content:'';
+            display:block;
+            width:0%;
+            opacity:0;
+            position:absolute;
+            bottom:0px;
+            border:1px solid #6ce4f6;
+            transition:all .3s;
+        }
+        #mainNav ul li a:hover:after {
+            width:100%;
+            opacity:1;
+        }
+        div.searchIcon {
+            float:right;
+        }
+
+        div.container {
+            background:white;
+            border-radius:5px;
+            -webkit-border-radius:5px;
+            -moz-border-radius:5px;
+            -o-border-radius:5px;
+            -ms-border-radius:5px;
+            border:1px solid #ccc;
+            padding:10px;
+            color:#939393;
+            font-weight:400;
+            font-size:19px;
+        }
+        .formElement {
+            padding:20px 10px 10px 150px
+
+        }
+        label.label {
+
+            display:inline-block;
+            text-align:right;
+            padding-right:25px;
+        }
+        input,textarea, select {
+            font-family: 'Open Sans', sans-serif;
+            background:#f6f6f6;
+            color:#a4a4a4;
+            border:none;
+            outline:none;
+            padding:13px;
+            border-radius:5px;
+            -webkit-border-radius:5px;
+            -moz-border-radius:5px;
+            -o-border-radius:5px;
+            -ms-border-radius:5px;
+            border:1px solid #ccc;
+            width:30%;
+            transition:all .3s;
+        }
+        select {
+            width:33.5%;
+            box-shadow:0 3px 0 #ccc;
+            -webkit-appearance:none;
+            -moz-appearance:none;
+            -o-appearance:none;
+            -ms-appearance:none;
+            appearance:none;
+            cursor:pointer;
+        }
+        input:hover,textarea:hover, select:hover {
+            border-color:#aaa;
+        }
+        input:focus,textarea:focus, select:focus {
+            box-shadow:0 0 0px 1.5px #3d92d9;
+        }
+
+        label.select {
+            position:relative;
+        }
+        label.select:after {
+            content:'<>';
+            font:15px "Consolas", monospace;
+            color:#ccc;
+            -webkit-transform:rotate(90deg);
+            -moz-transform:rotate(90deg);
+            -ms-transform:rotate(90deg);
+            -o-transform:rotate(90deg);
+            transform:rotate(90deg);
+            position:absolute;
+            right:22px;
+            top:2px;
+            border-bottom:1px solid #ccc;
+            padding-bottom:10px;
+            margin-bottom:-50px;
+        }
+        input[type="radio"] {
+            width:auto;
+            margin-right:6px;
+            margin-left:5%;
+            cursor:pointer;
+        }
+        label[for="dev"], label[for="qa"] {
+            cursor:pointer;
+        }
+        input[type="submit"] {
+            cursor:pointer;
+            border-radius:40px;
+            -webkit-border-radius:40px;
+            -moz-border-radius:40px;
+            -o-border-radius:40px;
+            -ms-border-radius:40px;
+            margin-left: 220px;
+        }
+        input[type="submit"]:hover {
+            background::#69B7FA;
+            background:linear-gradient(#69B7FA, #3280c2);
+            background:-webkit-linear-gradient(#69B7FA, #3280c2);
+            background:-moz-linear-gradient(#69B7FA, #3280c2);
+            background:-o-linear-gradient(#69B7FA, #3280c2);
+            background:-ms-linear-gradient(#69B7FA, #3280c2);
+            box-shadow:inset 0 1px #6ce4f6, 0 1px #787778;
+        }
+        .formElement:last-child {
+            padding:0;
+            margin-bottom:15px;
+        }
+        .searchIcon input {
+            width:200px;
+            padding:5px;
+            position: relative;
+            top: -5px;
+            left: -10px;
+            background: #2169a6;
+            border-color: #4197df;
+            color:white;
+        }
+        .searchIcon img {
+            margin-top:15px;
+            cursor:pointer;
+        }
+        button#searchBtn {
+            background:none;
+            border:none;
+            outline:none;
+            opacity:.8;
+        }
+        button#searchBtn:hover {
+            opacity:1;
+        }
+        input.searchBox {
+            left:0;
+            width:0;
+            opacity:0;
+        }
+
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+        #customers tr:hover {background-color: #ddd;}
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+
+
+    </style>
+
+
+    <script>
+        $(document).ready(function() {
+
+            $("#nowShowingForm").submit(function(e) {
+
+                e.preventDefault();
+                //var formData = JSON.stringify($("#sampleForm").serializeArray());
+                var data = {
+
+                    "ssn": $('#ssn').val()
+                };
+
+                //console.log(data);
+
+                $.ajax({
+                    url : "/getMyTickets",
+                    data : JSON.stringify(data),
+                    type : "POST",
+                    success : function(myTicket) {
+                        console.log(myTicket);
+                        var text="";
+                        text+="<tr>";
+                        text+="<th>Movie Name</th>";
+                        text+="<th>Show Time</th>";
+                        text+="<th>Theater Name</th>";
+                        text+="<th>State </th>";
+                        text+="<th>Country </th>";
+                        text+="<th>Seat Number </th>";
+                        text+="</tr>";
+
+                        for(var i=0;i<myTicket.length;i++) {
+                            text+="<tr>";
+                            text+="<td>"+myTicket[i].movieName+"</td>";
+                            text+="<td>"+myTicket[i].showTime+"</td>";
+                            text+="<td>"+myTicket[i].theater_name+"</td>";
+                            text+="<td>"+myTicket[i].state+"</td>";
+                            text+="<td>"+myTicket[i].country+"</td>";
+                            text+="<td>"+myTicket[i].seatNumber+"</td>";
+                            text+="</tr>";
+                        }
+
+                        var userProfile = "";
+                        userProfile += "<br><div style='text-align: center;'>";
+                        userProfile += "Hi, "+myTicket[0].userName+"</br>";
+                        userProfile += "Email: "+myTicket[0].email+"</br>";
+                        userProfile += "Phone: "+myTicket[0].phone+"</br>";
+                        userProfile += "<br></div>";
+                        console.log("text : ");
+                        console.log(text);
+
+                        console.log("userprofile : ");
+                        console.log(userProfile);
+
+                        $("#output").append(userProfile);
+                        $("#customers").append(text);
+
+
+                        // console.log(text);
+                        // $("#output").append(text);
+                        //
+
+                    },
+                    error : function(xhr, status, error) {
+                        alert(status);
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
+            });
+
+
+        });
+
+
+
+    </script>
+
+</head>
+
+<body>
+<div style="text-align: center;
+    margin-top: 10px;
+    font-size: 40px;
+    font-family: fantasy;">
+    YOUR TICKETS</div>
+
+<div class="container">
+    <form action="/getMyTickets" method="post" id="nowShowingForm">
+
+        <div class="formElement">
+            <label class="label" for="ssn">User ID(SSN):   </label>
+            <label>
+                <input id="ssn" type="text" name="ssn" >
+            </label>
+        </div>
+
+        <br />
+
+        <div class="formElement">
+            <label class="label"></label>
+            <input type="submit" value="GET TICKETS">
+        </div>
+    </form>
+
+</div>
+
+
+<br />
+<div id="output">
+
+</div>
+<table id="customers">
+
+</table>
+</body>
+</html>

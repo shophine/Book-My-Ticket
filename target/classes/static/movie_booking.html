@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+
+    <title>Book Movie</title>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        body {
+            background:url('https://i.imgur.com/gaqdL8o.jpg') repeat #ccc;
+            font-family: 'Open Sans', sans-serif;
+            font-weight:400;
+        }
+        a {
+            text-decoration:none;
+            color:white;
+            outline:none; /* IE fix */
+        }
+        .container, nav#mainNav {
+            width:768px;
+            margin:0 auto;
+        }
+        .header {
+            background:#e1fbfc;
+            background:linear-gradient(#e2fbfd, #e1fbfc);
+            background:-webkit-linear-gradient(#e2fbfd, #e1fbfc);
+            background:-moz-linear-gradient(#e2fbfd, #e1fbfc);
+            background:-o-linear-gradient(#e2fbfd, #e1fbfc);
+            background:-ms-linear-gradient(#e2fbfd, #e1fbfc);
+
+            padding:10px 0 0 10px;
+        }
+        div.logo {
+            width: 768px;
+            margin:0 auto;
+        }
+        div.navBar, input[type="submit"] {
+            background::#50a5ed;
+            background:linear-gradient(#50a5ed, #3280c2);
+            background:-webkit-linear-gradient(#50a5ed, #3280c2);
+            background:-moz-linear-gradient(#50a5ed, #3280c2);
+            background:-o-linear-gradient(#50a5ed, #3280c2);
+            background:-ms-linear-gradient(#50a5ed, #3280c2);
+            box-shadow:inset 0 1px #6ce4f6, 0 1px #787778;
+            color:white;
+        }
+        nav#mainNav {
+            overflow:hidden;
+        }
+        #mainNav ul {
+            list-style:none;
+            float:left;
+        }
+        #mainNav ul li {
+            display:inline;
+        }
+        #mainNav ul li a {
+            padding:15px 0;
+            margin-right:30px;
+            display:inline-block;
+            position:relative;
+            text-align:center;
+        }
+        #mainNav ul li a:after {
+            content:'';
+            display:block;
+            width:0%;
+            opacity:0;
+            position:absolute;
+            bottom:0px;
+            border:1px solid #6ce4f6;
+            transition:all .3s;
+        }
+        #mainNav ul li a:hover:after {
+            width:100%;
+            opacity:1;
+        }
+        div.searchIcon {
+            float:right;
+        }
+
+        div.container {
+            background:white;
+            border-radius:5px;
+            -webkit-border-radius:5px;
+            -moz-border-radius:5px;
+            -o-border-radius:5px;
+            -ms-border-radius:5px;
+            border:1px solid #ccc;
+            padding:10px;
+            color:#939393;
+            font-weight:400;
+            font-size:19px;
+        }
+        .formElement {
+            padding:20px 10px 10px 150px
+
+        }
+        label.label {
+
+            display:inline-block;
+            text-align:right;
+            padding-right:25px;
+        }
+        input,textarea, select {
+            font-family: 'Open Sans', sans-serif;
+            background:#f6f6f6;
+            color:#a4a4a4;
+            border:none;
+            outline:none;
+            padding:13px;
+            border-radius:5px;
+            -webkit-border-radius:5px;
+            -moz-border-radius:5px;
+            -o-border-radius:5px;
+            -ms-border-radius:5px;
+            border:1px solid #ccc;
+            width:30%;
+            transition:all .3s;
+        }
+        select {
+            width:33.5%;
+            box-shadow:0 3px 0 #ccc;
+            -webkit-appearance:none;
+            -moz-appearance:none;
+            -o-appearance:none;
+            -ms-appearance:none;
+            appearance:none;
+            cursor:pointer;
+        }
+        input:hover,textarea:hover, select:hover {
+            border-color:#aaa;
+        }
+        input:focus,textarea:focus, select:focus {
+            box-shadow:0 0 0px 1.5px #3d92d9;
+        }
+
+        label.select {
+            position:relative;
+        }
+        label.select:after {
+            content:'<>';
+            font:15px "Consolas", monospace;
+            color:#ccc;
+            -webkit-transform:rotate(90deg);
+            -moz-transform:rotate(90deg);
+            -ms-transform:rotate(90deg);
+            -o-transform:rotate(90deg);
+            transform:rotate(90deg);
+            position:absolute;
+            right:22px;
+            top:2px;
+            border-bottom:1px solid #ccc;
+            padding-bottom:10px;
+            margin-bottom:-50px;
+        }
+        input[type="radio"] {
+            width:auto;
+            margin-right:6px;
+            margin-left:5%;
+            cursor:pointer;
+        }
+        label[for="dev"], label[for="qa"] {
+            cursor:pointer;
+        }
+        input[type="submit"] {
+            cursor:pointer;
+            border-radius:40px;
+            -webkit-border-radius:40px;
+            -moz-border-radius:40px;
+            -o-border-radius:40px;
+            -ms-border-radius:40px;
+            margin-left: 220px;
+        }
+        input[type="submit"]:hover {
+            background::#69B7FA;
+            background:linear-gradient(#69B7FA, #3280c2);
+            background:-webkit-linear-gradient(#69B7FA, #3280c2);
+            background:-moz-linear-gradient(#69B7FA, #3280c2);
+            background:-o-linear-gradient(#69B7FA, #3280c2);
+            background:-ms-linear-gradient(#69B7FA, #3280c2);
+            box-shadow:inset 0 1px #6ce4f6, 0 1px #787778;
+        }
+        .formElement:last-child {
+            padding:0;
+            margin-bottom:15px;
+        }
+        .searchIcon input {
+            width:200px;
+            padding:5px;
+            position: relative;
+            top: -5px;
+            left: -10px;
+            background: #2169a6;
+            border-color: #4197df;
+            color:white;
+        }
+        .searchIcon img {
+            margin-top:15px;
+            cursor:pointer;
+        }
+        button#searchBtn {
+            background:none;
+            border:none;
+            outline:none;
+            opacity:.8;
+        }
+        button#searchBtn:hover {
+            opacity:1;
+        }
+        input.searchBox {
+            left:0;
+            width:0;
+            opacity:0;
+        }
+
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+        #customers tr:hover {background-color: #ddd;}
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+
+
+    </style>
+
+
+
+
+    <script>
+        var t,userLoggedIn;
+        $(document).ready(function() {
+            $.ajax({
+                url : "/getCountriesFromNowShowing",
+                data : "data",
+                type : "GET",
+                success : function(response) {
+                    var responseJSON = JSON.parse(response);
+                    var text="";
+                    for(var i=0;i<responseJSON.length;i++){
+                        if(i==0){
+                            text+= "<option value=\""+responseJSON[i].country+"\" selected>"+responseJSON[i].country+"</option>";
+
+                        }else{
+                            text+= "<option value=\""+responseJSON[i].country+"\">"+responseJSON[i].country+"</option>";
+
+                        }
+                    }
+                    //console.log(text);
+                    $("#countryList").append(text);
+
+                },
+                error : function(xhr, status, error) {
+                    alert(xhr.responseText);
+                }
+            });
+
+
+            $("#countryList").change(function() {
+                $("#stateList").html("");
+                $("#theaterList").html("");
+                $("#output").html("");
+
+                var countrySelected =  $('#countryList').val();
+                var countrySelectedJSON = {
+                    "country": countrySelected
+                };
+
+                $.ajax({
+                    url : "/getStateForSelectedCountry",
+                    data : JSON.stringify(countrySelectedJSON),
+                    type : "POST",
+                    success : function(stateResponseJSON) {
+                        var text="";
+                        for(var i=0;i<stateResponseJSON.length;i++){
+                            if(i==0){
+                                text+= "<option value=\""+stateResponseJSON[i].state+"\" selected>"+stateResponseJSON[i].state+"</option>";
+
+                            }else{
+                                text+= "<option value=\""+stateResponseJSON[i].state+"\">"+stateResponseJSON[i].state+"</option>";
+
+                            }
+                        }
+                        // console.log("From state:");
+                        // console.log(text);
+                        $("#stateList").append(text);
+                    },
+                    error : function(xhr, status, error) {
+                        alert(status);
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
+            });
+
+            $("#stateList").change(function() {
+                $("#theaterList").html("");
+                $("#output").html("");
+
+                var stateSelected =  $('#stateList').val();
+                var stateSelectedJSON = {
+                    "state": stateSelected
+                };
+
+                $.ajax({
+                    url : "/getTheatersForSelectedState",
+                    data : JSON.stringify(stateSelectedJSON),
+                    type : "POST",
+                    success : function(TheaterResponseJSON) {
+                        var text="";
+                        for(var i=0;i<TheaterResponseJSON.length;i++){
+                            if(i==0){
+                                text+= "<option value=\""+TheaterResponseJSON[i].theater_id+"\" selected>"+TheaterResponseJSON[i].theater_name+"</option>";
+
+                            }else{
+                                text+= "<option value=\""+TheaterResponseJSON[i].theater_id+"\">"+TheaterResponseJSON[i].theater_name+"</option>";
+
+                            }
+                        }
+                        console.log("From theater:");
+                        console.log(TheaterResponseJSON);
+                        $("#theaterList").append(text);
+
+
+                    },
+                    error : function(xhr, status, error) {
+                        alert(status);
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
+            });
+
+
+            $("#nowShowingForm").submit(function(e) {
+
+                e.preventDefault();
+                //var formData = JSON.stringify($("#sampleForm").serializeArray());
+                var data = {
+
+                    "country": $('#countryList').val(),
+                    "state": $('#stateList').val(),
+                    "theater_name" : $("#theaterList option:selected").text(),
+                    "theater_id": $('#theaterList').val()
+                };
+                userLoggedIn = $('#ssn').val();
+                //console.log(userLoggedIn);
+                t=data;
+
+                //console.log(data);
+
+                $.ajax({
+                    url : "/getMoviesFromTheater",
+                    data : JSON.stringify(data),
+                    type : "POST",
+                    success : function(nowShowingAtTheaterResponse) {
+                        //console.log(nowShowingAtTheaterResponse);
+
+                        var text="";
+
+                        text+= " <table id=\"customers\">" +
+                                    "<tr>" +
+                                        "<th>Select</th>"+
+                                        "<th>Movie Name</th>" +
+                                        "<th>Ratings</th>" +
+                                        "<th>Show Time</th>" +
+                                    "</tr>";
+                        console.log(nowShowingAtTheaterResponse);
+                        for(var i=0;i<nowShowingAtTheaterResponse.length;i++){
+                            console.log(nowShowingAtTheaterResponse[i]);
+                            text+= "<tr>" +
+                                        "<td><input type=\"radio\" name=\"fruit\" value=\"" + nowShowingAtTheaterResponse[i].movieName+"\" id=\""+nowShowingAtTheaterResponse[i].showTime+"\"></td>" +
+                                        " <td>" + nowShowingAtTheaterResponse[i].movieName+ "</td>" +
+                                        " <td>" + nowShowingAtTheaterResponse[i].movieRating+ "</td>" +
+                                        " <td>" + nowShowingAtTheaterResponse[i].showTime+ "</td>" +
+                                    "</tr>";
+                        }
+                        text+="<button onclick=\"myFunction(t,userLoggedIn)\">Book Now</button>";
+                        text+= "</table>";
+
+
+                        // console.log("From theater:");
+                        console.log(text);
+                        $("#output").append(text);
+
+
+                    },
+                    error : function(xhr, status, error) {
+                        alert(status);
+                    },
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+
+            });
+
+
+        });
+
+        function myFunction(x,ssn){
+            console.log(x);
+
+            var radios = document.getElementsByName('fruit');
+
+            for (var i = 0, length = radios.length; i < length; i++) {
+                if (radios[i].checked) {
+                    // do whatever you want with the checked radio
+                    var showTime = radios[i].id;
+                    var movieName = radios[i].value;
+                    var userSSN = ssn;
+
+
+                    var res = {
+                        "userSSN": userSSN,
+                        "showTime": showTime,
+                        "movieName": movieName,
+                        "theater_id": x.theater_id,
+                        "theater_name": x.theater_name,
+                        "state": x.state,
+                        "country": x.country,
+                        "rating": 7
+                    };
+
+                    $.ajax({
+                        url : "/bookTickets",
+                        data : JSON.stringify(res),
+                        type : "POST",
+                        success : function(bt) {
+                            window.location.href = "/confirmation.html?userID=" + res.userSSN + "&showTime=" + res.showTime + "&MovieName=" + res.movieName + "&TheaterName=" + res.theater_name + "&state=" + res.state + "&country=" + res.country;
+                        },
+                        error : function(xhr, status, error) {
+                            alert(status);
+                        },
+                        dataType: "json",
+                        contentType: "application/json"
+                    });
+
+
+                    break;
+                }
+            }
+
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+<div style="text-align: center;
+    margin-top: 10px;
+    font-size: 40px;
+    font-family: fantasy;">
+    MOVIE BOOKING</div>
+
+    <div class="container">
+    	<form action="/getMoviesAtTheater" method="post" id="nowShowingForm">
+
+            <div class="formElement">
+                <label class="label" for="ssn">User ID:   </label>
+                <label>
+                    <input id="ssn" type="text" name="ssn" >
+                </label>
+            </div>
+
+        	<div class="formElement">
+                <label class="label" for="countryList">Select the Country:   </label>
+                <label class="select">
+                    <select id="countryList" name="country" >
+<!--                        <option value="red">Red</option>-->
+<!--                        <option value="yellow">Yellow</option>-->
+                    </select>
+                </label>
+            </div>
+            <div class="formElement">
+                <label class="label" for="stateList">Select the State:</label>
+                <label class="select">
+                    <select id="stateList" name="state" >
+                        <!--                        <option value="red">Red</option>-->
+                        <!--                        <option value="yellow">Yellow</option>-->
+                    </select>
+
+                </label>
+            </div>
+
+            <div class="formElement">
+                <label class="label" for="theaterList">Select the Theater:</label>
+                <label class="select">
+                    <select id="theaterList" name="theater" >
+                        <!--                        <option value="red">Red</option>-->
+                        <!--                        <option value="yellow">Yellow</option>-->
+                    </select>
+
+                </label>
+            </div>
+
+
+        <br />
+
+        	<div class="formElement">
+            	<label class="label"></label>
+            	<input type="submit" value="Show">
+            </div>
+        </form>
+
+    </div>
+
+
+<br />
+    <div id="output">
+
+    </div>
+</body>
+</html>
